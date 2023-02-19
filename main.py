@@ -1,19 +1,32 @@
 from app import create_app
 from app.db import db
-from flask import request, jsonify
-from datetime import date
+
+import pandas
+from flask import render_template, request, jsonify
+# from fileinput import filename
 
 from app.models.models import *
 
 app=create_app()
 
-@app.route('/',) #ruta raiz
-def index():
-    return "Hola mensaje de prueba"
-    
-db.init_app(app)
-with app.app_context():
-    db.create_all()
+# Root endpoint
+@app.route('/')
+def upload():
+    return render_template('upload-excel.html')
+
+@app.post('/view')
+def view():
+ 
+    # Read the File using Flask request
+    file = request.files['file']
+    # save file in local directory
+    file.save(file.filename)
+ 
+    # Parse the data as a Pandas DataFrame type
+    data = pandas.read_excel(file)
+ 
+    # Return HTML snippet that will render the table
+    return data.to_html()
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=os.environ.get('FLASK_DEBUG'))

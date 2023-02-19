@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Cargar/Ver Excel</title>
+</head>
+ 
+<body>
+    <h1>Cargar archivo Excel (.xlsx)</h1>
+    <form action="{{ url_for('view') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+        <input type="submit" value="Upload">
+    </form>
+</body>
+ 
+</html>

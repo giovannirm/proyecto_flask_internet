@@ -10,11 +10,8 @@ class Company(db.Model):
     name = db.Column(db.String(50), nullable=False)
     sunat_status = db.Column(db.BOOLEAN, nullable=False, default=True)
 
-    created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    updated_at = db.Column(db.DateTime, nullable=False, onupdate=datetime.now)
-
-    created_at_a = db.Column(DateTime(timezone=True), nullable=False, server_default=func.now())
-    updated_at_a = db.Column(DateTime(timezone=True), nullable=False, server_onupdate=func.now())
+    created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, nullable=False, server_default=db.func.now(), server_onupdate=db.func.now())
     
     establishments = db.relationship('Establishment', backref='company', lazy='dynamic')
 
@@ -36,13 +33,13 @@ class Departament(db.Model):
 class Establishment(db.Model):
     __tablename__ = 'establishments'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
     company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
     establishments_segment = db.relationship('EstablishmentSegment', backref='establishment', lazy='dynamic')
 
-    def __init__(self, department_id, company_id):
-        self.department_id = department_id
+    def __init__(self, company_id, department_id):
         self.company_id = company_id
+        self.department_id = department_id
 
 class Segment(db.Model):
     __tablename__ = 'segments'

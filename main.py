@@ -58,13 +58,17 @@ def upload_departments():
         segment = Segment(df_segments.iloc[i])
         db.session.add(segment)
 
+    arr_tec = []
     df_technologies = df['Tecnologia'].drop_duplicates().dropna()
     for i in range(len(df_technologies)):
+        arr_tec.append(df_technologies.iloc[i])
         technology = Technology(df_technologies.iloc[i])
         db.session.add(technology)
 
+    arr_spee = []
     df_speed_ranges = df['Rango_velocidad'].drop_duplicates().dropna()
     for i in range(len(df_speed_ranges)):
+        arr_spee.append(df_speed_ranges.iloc[i])
         speed_range = SpeedRange(df_speed_ranges.iloc[i])
         db.session.add(speed_range)
 
@@ -91,17 +95,34 @@ def upload_departments():
         establishment = Establishment(company_id, department_id)
         db.session.add(establishment)
 
+    arr_est_seg = []
     df_establishment_segment = df[['RUC Empresa', 'Departamento', ' (Segmento)']].drop_duplicates()
     for i in range(len(df_establishment_segment)):
         ruc = df_establishment_segment.iloc[i][0]
         department = df_establishment_segment.iloc[i][1]
         segment = df_establishment_segment.iloc[i][2]
+        arr_est_seg.append("company: {}, department: {}, segment: {}".format(ruc, department, segment))
 
         establishment_id = arr_est.index("company: {}, department: {}".format(ruc, department)) + 1
         segment_id = arr_seg.index(segment) + 1
         
         establishment_segment = EstablishmentSegment(establishment_id, segment_id)
         db.session.add(establishment_segment)
+
+    df_establishment_segment = df[['RUC Empresa', 'Departamento', ' (Segmento)', 'Tecnologia', 'Rango_velocidad']].drop_duplicates()
+    for i in range(len(df_establishment_segment)):
+        ruc = df_establishment_segment.iloc[i][0]
+        department = df_establishment_segment.iloc[i][1]
+        segment = df_establishment_segment.iloc[i][2]
+        technology = df_establishment_segment.iloc[i][3]
+        speed_range = None if pd.isna(df_establishment_segment.iloc[i][4]) else df_establishment_segment.iloc[i][4]
+
+        establishment_segment_id = arr_est_seg.index("company: {}, department: {}, segment: {}".format(ruc, department, segment)) + 1
+        technology_id = arr_tec.index(technology) + 1
+        speed_range_id = arr_spee.index(speed_range) + 1
+        
+        internet_detail = InternetDetails(establishment_segment_id, technology_id, speed_range_id)
+        db.session.add(internet_detail)
 
     db.session.commit()
 

@@ -23,7 +23,7 @@ class Company(db.Model):
 class Departament(db.Model):
     __tablename__ = 'departments'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
 
     establishments = db.relationship('Establishment', backref='department', lazy='dynamic')
     
@@ -33,8 +33,8 @@ class Departament(db.Model):
 class Establishment(db.Model):
     __tablename__ = 'establishments'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'))
-    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
+    company_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=False)
+    department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
     establishments_segment = db.relationship('EstablishmentSegment', backref='establishment', lazy='dynamic')
 
     def __init__(self, company_id, department_id):
@@ -44,7 +44,7 @@ class Establishment(db.Model):
 class Segment(db.Model):
     __tablename__ = 'segments'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
     establishments_segment = db.relationship('EstablishmentSegment', backref='segment', lazy='dynamic')
 
     def __init__(self, name):
@@ -53,8 +53,8 @@ class Segment(db.Model):
 class EstablishmentSegment(db.Model):
     __tablename__ = 'establishment_segment'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    establishment_id = db.Column(db.Integer, db.ForeignKey('establishments.id'))
-    segment_id = db.Column(db.Integer, db.ForeignKey('segments.id'))
+    establishment_id = db.Column(db.Integer, db.ForeignKey('establishments.id'), nullable=False)
+    segment_id = db.Column(db.Integer, db.ForeignKey('segments.id'), nullable=False)
     internet_details = db.relationship('InternetDetails', backref='establishment_segment', lazy='dynamic')
 
     def __init__(self, establishment_id, segment_id):
@@ -64,7 +64,7 @@ class EstablishmentSegment(db.Model):
 class Technology(db.Model):
     __tablename__ = 'technologies'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
     internet_details = db.relationship('InternetDetails', backref='technology', lazy='dynamic')
 
     def __init__(self, name):
@@ -73,7 +73,7 @@ class Technology(db.Model):
 class SpeedRange(db.Model):
     __tablename__ = 'speed_ranges'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
     internet_details = db.relationship('InternetDetails', backref='speed_range', lazy='dynamic')
 
     def __init__(self, name):
@@ -82,9 +82,9 @@ class SpeedRange(db.Model):
 class InternetDetails(db.Model):
     __tablename__ = 'internet_details'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    establishment_segment_id = db.Column(db.Integer, db.ForeignKey('establishment_segment.id'), primary_key=True)
-    technology_id = db.Column(db.Integer, db.ForeignKey('technologies.id'), primary_key=True)
-    speed_range_id = db.Column(db.Integer, db.ForeignKey('speed_ranges.id'), primary_key=True)
+    establishment_segment_id = db.Column(db.Integer, db.ForeignKey('establishment_segment.id'), nullable=False)
+    technology_id = db.Column(db.Integer, db.ForeignKey('technologies.id'), nullable=False)
+    speed_range_id = db.Column(db.Integer, db.ForeignKey('speed_ranges.id'), nullable=True)
 
     def __init__(self, establishment_segment_id, technology_id, speed_range_id):
         self.establishment_segment_id = establishment_segment_id

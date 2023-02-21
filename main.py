@@ -2,27 +2,34 @@ from app import create_app
 from app.db import db
 
 import pandas as pd
-from flask import render_template, request, jsonify
+# from flask import render_template, request, jsonify
 # from fileinput import filename
 from fastapi import FastAPI
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 from app.models.models import *
-from app.routes import maincompany as maincompany
+from app.routers import company as router_company
 import uvicorn
 
-app = create_app()
-api = FastAPI(title="FastAPI - Proyecto Final Silabuz",
+# app = create_app()
+app = FastAPI(title="FastAPI - Proyecto Final Silabuz",
               version="1.0")
 
-api.include_router(maincompany.routercompany)
+templates = Jinja2Templates(directory="templates")
+
+app.include_router(router_company.company)
 
 # Root endpoint
-@app.route('/upload-excel')
-def upload():
-    return render_template('upload-excel.html')
+# @app.route('/upload-excel')
+@app.get('/upload-excel', response_class=HTMLResponse)
+def upload_excel():
+    return templates.TemplateResponse("upload-excel.html")
+    # return render_template('upload-excel.html')
 
-@app.post('/view')
-def view():
+@app.post('/view-excel', response_class=HTMLResponse)
+def view_excel(request: Request)):
  
     # Read the File using Flask request
     file = request.files['file']
@@ -35,7 +42,8 @@ def view():
     # Return HTML snippet that will render the table
     return data.to_html()
 
-@app.route('/upload-departments')
+# @app.route('/upload-departments')
+@app.get('/upload-departments')
 def upload_departments():
 
     db.session.commit()
@@ -143,4 +151,13 @@ with app.app_context():
     db.create_all()
 
 if __name__ == "__main__":
-    app.run(debug=os.environ.get('FLASK_DEBUG'))
+    # app.run(debug=os.environ.get('FLASK_DEBUG'))
+    # uvicorn.run("main:app", "reload=True")
+    uvicorn.run("main:app")
+
+# Alternativamente, puede iniciar el servidor directamente desde la terminal:
+# uvicorn run fastapi_code:app
+
+# Para recarga en caliente:
+# uvicorn run fastapi_code:app --reload
+# https://morioh.com/p/967cc4bca8db

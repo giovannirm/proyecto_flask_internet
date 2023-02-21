@@ -4,9 +4,13 @@ from app.schemas.schemas import CompanySchema
 from app.models.models import Company
 
 
-routercompany = APIRouter(prefix="/companies")
+company = APIRouter(prefix="/companies")
 
-@routercompany.get('/fetchall-companies')
+@company.get('/fetchall-companies')
 def view_companies():
     companies = Company.query.all()
     return companies
+
+# @app.get("/employee/{id}")
+# def home(id: int):
+#     return {"id": id}

@@ -119,7 +119,10 @@ def upload_departments():
 
         establishment_segment_id = arr_est_seg.index("company: {}, department: {}, segment: {}".format(ruc, department, segment)) + 1
         technology_id = arr_tec.index(technology) + 1
-        speed_range_id = arr_spee.index(speed_range) + 1
+        if speed_range != None:
+            speed_range_id = arr_spee.index(speed_range) + 1
+        else:
+            speed_range_id = None
         
         internet_detail = InternetDetails(establishment_segment_id, technology_id, speed_range_id)
         db.session.add(internet_detail)

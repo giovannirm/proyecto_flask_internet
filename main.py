@@ -29,7 +29,7 @@ def upload_excel():
     # return render_template('upload-excel.html')
 
 @app.post('/view-excel', response_class=HTMLResponse)
-def view_excel(request: Request)):
+def view_excel(request: Request):
  
     # Read the File using Flask request
     file = request.files['file']
@@ -144,11 +144,11 @@ def upload_departments():
 
     db.session.commit()
 
-    return render_template('upload-excel.html')
+    return templates.TemplateResponse("upload-excel.html")
 
-db.init_app(app)
-with app.app_context():
-    db.create_all()
+# db.init_app(app)
+# with app.app_context():
+#     db.create_all()
 
 if __name__ == "__main__":
     # app.run(debug=os.environ.get('FLASK_DEBUG'))

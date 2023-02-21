@@ -4,10 +4,17 @@ from app.db import db
 import pandas as pd
 from flask import render_template, request, jsonify
 # from fileinput import filename
+from fastapi import FastAPI
 
 from app.models.models import *
+from app.routes import maincompany as maincompany
+import uvicorn
 
-app=create_app()
+app = create_app()
+api = FastAPI(title="FastAPI - Proyecto Final Silabuz",
+              version="1.0")
+
+api.include_router(maincompany.routercompany)
 
 # Root endpoint
 @app.route('/upload-excel')

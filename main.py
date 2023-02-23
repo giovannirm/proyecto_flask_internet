@@ -5,7 +5,15 @@ import pandas as pd
 from flask import render_template, request, jsonify
 # from fileinput import filename
 
-from app.models.models import *
+# Models
+from app.models.company import Company
+from app.models.department import Departament
+from app.models.establishment import Establishment
+from app.models.segment import Segment
+from app.models.establishment_segment import EstablishmentSegment
+from app.models.technology import Technology
+from app.models.speed_range import SpeedRange
+from app.models.internet_details import InternetDetails
 
 app = create_app()
 
@@ -16,7 +24,8 @@ app = create_app()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    companies = Company.query.all()
+    return render_template('index.html', companies = companies)
 
 # Root endpoint
 @app.route('/upload-excel')

@@ -15,17 +15,34 @@ from app.models.technology import Technology
 from app.models.speed_range import SpeedRange
 from app.models.internet_details import InternetDetails
 
-app = create_app()
+# Schemas
+from app.schemas.company import companies_schema
+from app.schemas.internet_detail import internet_details_schema
 
-# @app.get('/fetchall-companies')
-# def view_companies():
-#     companies = Company.query.all()
-#     return companies
+app = create_app()
 
 @app.route('/')
 def index():
     companies = Company.query.all()
     return render_template('index.html', companies = companies)
+
+@app.route('/companies', methods=['GET'])
+def get_companies():
+    companies = Company.query.all()
+
+    if companies:
+        return companies_schema.dump(companies)
+    
+    return jsonify({'message':'No hay compañías'})
+
+@app.route('/internet-details', methods=['GET'])
+def get_internet_details():
+    internet_details = InternetDetails.query.all()
+
+    if internet_details:
+        return internet_details_schema.dump(internet_details)
+    
+    return jsonify({'message':'No hay compañías'})
 
 # Root endpoint
 @app.route('/upload-excel')

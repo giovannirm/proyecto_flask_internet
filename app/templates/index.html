@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1 class="text-center text-dark mb-4">LISTADO DE EMPRESAS</h1>
 <table id="data" class="table table-striped">
     <thead>
         <tr>
@@ -30,12 +31,32 @@
     $(document).ready(function () {
         $('#data').DataTable({
             columns: [
-                { orderable: false, searchable: false },
-                { orderable: false, searchable: false },
-                { orderable: false, searchable: false },
-                { orderable: false, searchable: false },
-                { orderable: false, searchable: false }
+                { orderable: true, searchable: true },
+                { orderable: true, searchable: true },
+                { orderable: true, searchable: true },
+                { orderable: true, searchable: false },
+                { orderable: true, searchable: false }
             ],
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
         });
     });
 </script>

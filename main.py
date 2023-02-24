@@ -4,6 +4,7 @@ from db import db
 import pandas as pd
 from flask import render_template, request, jsonify
 # from fileinput import filename
+import os
 
 # Models
 from app.models.company import Company
@@ -17,12 +18,13 @@ from app.models.internet_details import InternetDetails
 
 # Schemas
 from app.schemas.company import companies_schema
-from app.schemas.internet_detail import internet_details_schema
+from app.schemas.internet_detail import *
 
 app = create_app()
 
 @app.route('/')
 def index():
+    upload_data()
     companies = Company.query.all()
     return render_template('index.html', companies = companies)
 
@@ -42,11 +44,21 @@ def get_internet_details():
     if internet_details:
         return internet_details_schema.dump(internet_details)
     
-    return jsonify({'message':'No hay compañías'})
+    return jsonify({'message':'No hay detalles de internet'})
+
+@app.route('/technologies/<id>', methods=['GET'])
+def view_technology(id):
+    technology = Technology.query.filter_by(id=id).all()
+
+    if technology:
+        return technology_schema.dump(technology)
+    
+    return jsonify({'message':'No hay tecnología'})
 
 # Root endpoint
 @app.route('/upload-excel')
 def upload():
+    
     return render_template('upload-excel.html')
 
 @app.post('/view')
@@ -63,8 +75,7 @@ def view():
     # Return HTML snippet that will render the table
     return data.to_html()
 
-@app.route('/upload-departments')
-def upload_departments():
+def upload_data():
 
     db.session.commit()
     db.drop_all()
@@ -72,9 +83,6 @@ def upload_departments():
 
     xls = pd.ExcelFile('data_internet.xlsx')
     df = xls.parse(xls.sheet_names[0])
-
-    # for row in df.itertuples():
-    #     print(row[0])
 
     # for row in df.itertuples():
     #     print(row[0])
@@ -163,8 +171,6 @@ def upload_departments():
         db.session.add(internet_detail)
 
     db.session.commit()
-
-    return render_template('upload-excel.html')
 
 if __name__ == "__main__":
     app.run(debug=os.environ.get('FLASK_DEBUG'))

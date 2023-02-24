@@ -51,7 +51,11 @@ class InternetDetailsSchema(ma.Schema):
     speed_range_id = ma.Nested(SpeedRangeSchema)
 
     _links = ma.Hyperlinks({
-        'self': ma.URLFor('est_seg', values=dict(id='<id>')),
+        'self': {
+            'href': ma.URLFor('view_technology', values=dict(id='<id>')),
+            'title': 'technology'
+        },
+        'collection': ma.URLFor('view_technology')
     })
 
 establishment_schema = EstablishmentSchema()

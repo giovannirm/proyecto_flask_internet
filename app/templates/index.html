@@ -13,15 +13,17 @@
         </tr>
     </thead>
     <tbody>
-        {% for company in companies %}
-        <tr>
-            <td>{{ company.ruc }}</td>
-            <td>{{ company.name }}</td>
-            <td>{{ 'ACTIVO' if company.sunat_status else 'INACTIVO' }}</td>
-            <td>{{ company.created_at }}</td>
-            <td>{{ company.updated_at }}</td>
-        </tr>
-        {% endfor %}
+        {% if companies %}
+            {% for company in companies %}
+            <tr>
+                <td>{{ company.ruc }}</td>
+                <td>{{ company.name }}</td>
+                <td>{{ 'ACTIVO' if company.sunat_status else 'INACTIVO' }}</td>
+                <td>{{ company.created_at }}</td>
+                <td>{{ company.updated_at }}</td>
+            </tr>
+            {% endfor %}
+        {% endif %}        
     </tbody>
 </table>
 {% endblock %}

@@ -1,8 +1,7 @@
 from db import ma
 
-from app.schemas.company import CompanySchema
-from app.schemas.department import DepartamentSchema
-
+from app.models.company import Company
+from app.models.department import Departament
 from app.models.internet_details import InternetDetails
 from app.models.technology import Technology
 from app.models.speed_range import SpeedRange
@@ -10,19 +9,36 @@ from app.models.establishment_segment import EstablishmentSegment
 from app.models.establishment import Establishment
 from app.models.segment import Segment
 
+class CompanySchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'ruc', 'name', 'sunat_status', 'created_at', 'updated_at')
+        model = Company
+
+company_schema = CompanySchema()
+companies_schema = CompanySchema(many=True)
+
+class DepartamentSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'name')
+        model = Departament
+
+department_schema = DepartamentSchema()
+departments_schema = DepartamentSchema(many=True)
+
 class EstablishmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'company_id', 'department_id')
         model = Establishment
+        exclude = ('company_id', 'department_id',)
 
-    company_id = ma.Nested(CompanySchema)
-    department_id = ma.Nested(DepartamentSchema)
+establishment_schema = EstablishmentSchema()
+establishments_schema = EstablishmentSchema(many=True)
 
 class SegmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'name')
         model = Segment
-
+        
 class EstablishmentSegmentSchema(ma.Schema):
     class Meta:
         fields = ('id', 'establishment_id', 'segment_id')
@@ -38,28 +54,10 @@ class TechnologySchema(ma.Schema):
 
 class SpeedRangeSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name')
         model = SpeedRange
+        fields = ('id', 'name')
 
-class InternetDetailsSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'establishment_segment_id', 'technology_id', 'speed_range_id')
-        model = InternetDetails
 
-    establishment_segment_id = ma.Nested(EstablishmentSegmentSchema)
-    technology_id = ma.Nested(TechnologySchema)
-    speed_range_id = ma.Nested(SpeedRangeSchema)
-
-    _links = ma.Hyperlinks({
-        'self': {
-            'href': ma.URLFor('view_technology', values=dict(id='<id>')),
-            'title': 'technology'
-        },
-        'collection': ma.URLFor('view_technology')
-    })
-
-establishment_schema = EstablishmentSchema()
-establishments_schema = EstablishmentSchema(many=True)
 
 segment_schema = SegmentSchema()
 segments_schema = SegmentSchema(many=True)
@@ -69,6 +67,17 @@ establishments_segment_schema = EstablishmentSegmentSchema(many=True)
 
 technology_schema = TechnologySchema()
 technologies_schema = TechnologySchema(many=True)
+
+
+class InternetDetailsSchema(ma.Schema):
+    class Meta:
+        model = InternetDetails
+        fields = ('id', 'establishment_segment_id', 'technology_id', 'speed_range_id')
+
+    establishment_segment_id = ma.Nested(EstablishmentSegmentSchema)
+    technology_id = ma.Nested(TechnologySchema)
+    speed_range_id = ma.Nested(SpeedRangeSchema)
+
 
 speed_range_schema = SpeedRangeSchema()
 speed_ranges_schema = SpeedRangeSchema(many=True)

@@ -1,4 +1,4 @@
-from db import db
+from app import db
 
 class EstablishmentSegment(db.Model):
     __tablename__ = 'establishment_segment'

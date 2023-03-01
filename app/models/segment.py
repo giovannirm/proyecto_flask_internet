@@ -1,4 +1,4 @@
-from db import db
+from app import db
 
 class Segment(db.Model):
     __tablename__ = 'segments'

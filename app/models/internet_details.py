@@ -1,4 +1,4 @@
-from db import db
+from app import db
 
 class InternetDetails(db.Model):
     __tablename__ = 'internet_details'

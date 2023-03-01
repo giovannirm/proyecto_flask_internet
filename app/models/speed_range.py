@@ -1,4 +1,4 @@
-from db import db
+from app import db
 
 class SpeedRange(db.Model):
     __tablename__ = 'speed_ranges'

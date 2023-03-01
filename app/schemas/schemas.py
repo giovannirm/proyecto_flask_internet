@@ -1,4 +1,4 @@
-from db import ma
+from app import ma
 
 from app.models.company import Company
 from app.models.department import Departament

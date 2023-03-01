@@ -1,4 +1,4 @@
-from db import db
+from app import db
 
 class Departament(db.Model):
     __tablename__ = 'departments'

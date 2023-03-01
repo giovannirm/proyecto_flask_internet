@@ -1,23 +1,11 @@
 from app import db, create_app
 
 import pandas as pd
-from flask import render_template, request, jsonify
-# from fileinput import filename
+from flask import render_template, jsonify
 import os
 
-# Models
-from app.models.company import Company
-from app.models.department import Departament
-from app.models.establishment import Establishment
-from app.models.segment import Segment
-from app.models.establishment_segment import EstablishmentSegment
-from app.models.technology import Technology
-from app.models.speed_range import SpeedRange
-from app.models.internet_details import InternetDetails
-from pprint import pprint
 # Schemas
-# from app.schemas.company import companies_schema
-from app.schemas.schemas import *
+from app.schemas import *
 
 app = create_app()
 

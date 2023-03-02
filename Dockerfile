@@ -1,5 +1,7 @@
 FROM python:3.9.12-slim
 
+LABEL MAINTAINER Michelle Giovanni Rojas Morales <giovannirm.python@gmail.com>
+
 WORKDIR /app
 
 RUN apt-get update && \

@@ -1,7 +1,7 @@
 from app import db, create_app
 
 import pandas as pd
-from flask import render_template, jsonify
+from flask import render_template
 import os
 
 # Models

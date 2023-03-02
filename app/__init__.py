@@ -9,7 +9,7 @@ from db import db, ma, migrate
 
 from app.routes import *
 
-def create_app(): # Función de fabrica
+def create_app(): # Función de fábrica
     app = Flask(__name__)
     app.config.from_object(Config)
 

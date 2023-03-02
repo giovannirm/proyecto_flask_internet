@@ -101,3 +101,8 @@ El valor que contenga NAME_DB será la base de datos que deberán crear en su ge
 ```console
     docker build -t proyecto_flask_internet .
 ```
+### Para correr nuestra imagen en un contenedor de Docker, ejecutar lo siguiente desde la raíz del proyecto
+
+```console
+    docker run --name contenedor_proyecto -p 5000:5000 -d proyecto_flask_internet
+```

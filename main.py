@@ -4,6 +4,9 @@ import pandas as pd
 from flask import render_template, jsonify
 import os
 
+# Models
+from app.models import *
+
 # Schemas
 from app.schemas import *
 
@@ -15,89 +18,6 @@ def index():
     upload_data()
     companies = Company.query.all()
     return render_template('index.html', companies = companies)
-
-# Endpoint para ver las empresas que existen 
-@app.route('/companies', methods=['GET'])
-def get_companies():
-    companies = Company.query.all()
-
-    if companies:
-        return companies_schema.dump(companies)
-    
-    return jsonify({'message':'No hay compañías'})
-
-# Endpoint para ver las tecnologías, velocidad por empresa
-@app.route('/internet-details', methods=['GET'])
-def get_internet_details():
-    companies = Company.query.all()
-
-    result = []
-    for company in companies:
-        speed_ranges = []
-        technologies = []
-        for establishment in company.establishments:
-            for headquarter in establishment.establishments_segment:
-                for detail in headquarter.internet_details:
-                    speed_ranges.append(speed_range_schema.dump(detail.speed_range))
-                    technologies.append(technology_schema.dump(detail.technology))
-
-        result.append({
-            "company": company_schema.dump(company),
-            "speed_ranges": speed_ranges,
-            "technologies": technologies
-        })
-    if result != []:
-        return result
-    
-    return jsonify({'message':'No hay detalles de internet'})
-
-# Endpoint para ver las sedes que existen
-@app.route('/headquarters', methods=['GET'])
-def get_headquarters():
-    headquarters = Establishment.query.all()
-    result = []
-    for headquarter in headquarters:
-        company = Company.query.filter_by(id=headquarter.company_id).first()
-        department = Departament.query.filter_by(id=headquarter.department_id).first()
-        
-        result.append({
-            "headquarter": headquarter.id,
-            "company": company_schema.dump(company),
-            "department": department_schema.dump(department)
-        })
-    if result != []:
-        return result
-        
-    return jsonify({'message':'No hay sedes disponibles'})
-
-
-@app.route('/technologies/<id>', methods=['GET'])
-def view_technology(id):
-    technology = Technology.query.get(id)
-
-    if technology:
-        return technology_schema.dump(technology)
-    
-    return jsonify({'message':'No hay tecnologías'})
-
-# Endpoint para ver las empresas que se encuentran en cada departamento
-@app.route('/companies_department/<id>', methods=['GET'])
-def view_companies_department(id):
-    department = Departament.query.get(id)
-
-    companies = []
-    for establishment in department.establishments:
-        companies.append(company_schema.dump(establishment.company))
-
-    result = {
-        "department": department_schema.dump(department),
-        "companies": companies   
-    }
-    
-    if result != []:
-        return result
-    
-    return jsonify({'message':'No hay departamentos registrados'})
 
 def upload_data():
 
@@ -191,7 +111,7 @@ def upload_data():
         else:
             speed_range_id = None
         
-        internet_detail = InternetDetails(establishment_segment_id, technology_id, speed_range_id)
+        internet_detail = InternetDetail(establishment_segment_id, technology_id, speed_range_id)
         db.session.add(internet_detail)
 
     db.session.commit()

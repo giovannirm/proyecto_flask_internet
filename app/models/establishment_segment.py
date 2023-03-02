@@ -5,7 +5,7 @@ class EstablishmentSegment(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     establishment_id = db.Column(db.Integer, db.ForeignKey('establishments.id'), nullable=False)
     segment_id = db.Column(db.Integer, db.ForeignKey('segments.id'), nullable=False)
-    internet_details = db.relationship('InternetDetails', backref='establishment_segment', lazy='dynamic')
+    internet_details = db.relationship('InternetDetail', backref='establishment_segment', lazy='dynamic')
 
     def __init__(self, establishment_id, segment_id):
         self.establishment_id = establishment_id

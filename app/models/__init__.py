@@ -5,4 +5,4 @@ from app.models.segment import Segment
 from app.models.establishment_segment import EstablishmentSegment
 from app.models.technology import Technology
 from app.models.speed_range import SpeedRange
-from app.models.internet_details import InternetDetails
+from app.models.internet_detail import InternetDetail

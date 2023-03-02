@@ -5,7 +5,8 @@ from app.schemas import companies_schema
 
 company = Blueprint('company', __name__)
 
-@company.route('/companies', methods=['GET'])
+# Endpoint para ver las empresas que existen 
+@company.route('/', methods=['GET'])
 def get_companies():
     companies = Company.query.all()
 

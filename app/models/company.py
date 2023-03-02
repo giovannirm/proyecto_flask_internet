@@ -1,7 +1,4 @@
 from app import db
-# from datetime import datetime
-# from sqlalchemy.sql import func
-# from sqlalchemy import DateTime
 
 class Company(db.Model):
     __tablename__ = 'companies'

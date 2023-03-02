@@ -1,6 +1,6 @@
 from app import db
 
-class InternetDetails(db.Model):
+class InternetDetail(db.Model):
     __tablename__ = 'internet_details'
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     establishment_segment_id = db.Column(db.Integer, db.ForeignKey('establishment_segment.id'), nullable=False)
